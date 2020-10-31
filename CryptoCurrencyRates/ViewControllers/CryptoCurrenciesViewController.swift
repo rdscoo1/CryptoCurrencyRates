@@ -1,5 +1,5 @@
 //
-//  CryptoCurrenciesList.swift
+//  CryptoCurrenciesViewController.swift
 //  CryptoCurrencyRates
 //
 //  Created by Roman Khodukin on 10/27/20.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CryptoCurrenciesList: UIViewController {
+class CryptoCurrenciesViewController: UIViewController {
     
     // MARK: - Private Properties
     
@@ -96,7 +96,7 @@ class CryptoCurrenciesList: UIViewController {
 
 // MARK: - UITableViewDataSource
 
-extension CryptoCurrenciesList: UITableViewDataSource {
+extension CryptoCurrenciesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filterCurrencies.count
     }
@@ -114,7 +114,7 @@ extension CryptoCurrenciesList: UITableViewDataSource {
     }
 }
 
-extension CryptoCurrenciesList: UITableViewDataSourcePrefetching {
+extension CryptoCurrenciesViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard
             let maxRow = indexPaths.map({ $0.row }).max()
@@ -151,7 +151,7 @@ extension CryptoCurrenciesList: UITableViewDataSourcePrefetching {
     }
 }
 
-extension CryptoCurrenciesList: UITableViewDelegate {
+extension CryptoCurrenciesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
                 withIdentifier: CryptoCurrenciesHeaderView.reuseId)
@@ -168,7 +168,7 @@ extension CryptoCurrenciesList: UITableViewDelegate {
 
 // MARK: - UISearchBarDelegate
 
-extension CryptoCurrenciesList: UISearchBarDelegate {
+extension CryptoCurrenciesViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if !searchText.isEmpty {
             filterCurrencies = currencies.filter {
@@ -183,7 +183,7 @@ extension CryptoCurrenciesList: UISearchBarDelegate {
 
 // MARK: - CryptoCurrenciesHeaderViewDelegate
 
-extension CryptoCurrenciesList: CryptoCurrenciesHeaderViewDelegate {
+extension CryptoCurrenciesViewController: CryptoCurrenciesHeaderViewDelegate {
     func orderButtonTapped() {
         present(getOrderActionSheet(handler: { result in
             switch result.title {

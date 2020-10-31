@@ -152,4 +152,3 @@ class CustomActivityIndicator: UIView {
         circleLayer.add(animation, forKey: "animateCircle")
     }
 }
-

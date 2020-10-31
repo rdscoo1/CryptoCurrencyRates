@@ -76,7 +76,9 @@ class NetworkService {
             }
                         
             do {
-                let items = try JSONDecoder().decode([T].self, from: data)
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let items = try decoder.decode([T].self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(items))
                 }
