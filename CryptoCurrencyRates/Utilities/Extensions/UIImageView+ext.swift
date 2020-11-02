@@ -17,8 +17,11 @@ extension UIImageView {
         if let imageDate = cache.cachedResponse(for: request)?.data {
             self.image = UIImage(data: imageDate)
         } else {
-            URLSession.shared.dataTask(with: request) { [unowned self] (data, response, _ ) in
-                guard let data = data, let response = response else {
+            let task = URLSession.shared.dataTask(with: request) { [unowned self] (data, response, error) in
+                guard error == nil,
+                      let data = data,
+                      let response = response as? HTTPURLResponse, response.statusCode == 200
+                else {
                     return
                 }
                 let cacheResponse = CachedURLResponse(response: response, data: data)
@@ -27,7 +30,10 @@ extension UIImageView {
                     self.image = UIImage(data: data)
                 }
                 
-            }.resume()
+            }
+            DispatchQueue.global(qos: .utility).async {
+                task.resume()
+            }
         }
     }
 }

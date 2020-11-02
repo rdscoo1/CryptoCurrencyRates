@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Currency: Codable {
+struct CurrencyModel: Codable {
     let id, symbol, name: String
     let image: String
     let currentPrice: Double

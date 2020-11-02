@@ -18,10 +18,10 @@ enum ApiPaths: String {
 }
 
 class NetworkService {
-
+    
     // MARK: - Public Methods
     
-    func getAllCoins(page: Int, completion: @escaping ([Currency]) -> Void) {
+    func getAllCoins(page: Int, completion: @escaping ([CurrencyModel]) -> Void) {
         let params: [String: String] = [
             "vs_currency": "usd",
             "order": "market_cap_desc",
@@ -31,7 +31,7 @@ class NetworkService {
             "price_change_percentage": "24h"
         ]
         
-        makeRequest(Currency.self,
+        makeRequest(CurrencyModel.self,
                     path: .markets,
                     httpMethod: .get,
                     parameters: params) { response in

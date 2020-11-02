@@ -8,8 +8,6 @@
 import UIKit
 
 extension UIImage {
-    
     static let rectangleArrowUp = UIImage(imageLiteralResourceName: "rectangleArrowUp")
     static let rectangleArrowDown = UIImage(imageLiteralResourceName: "rectangleArrowDown")
-    
 }

@@ -38,20 +38,18 @@ class CryptoCurrenciesViewController: UIViewController {
     
     // MARK: - Private variables
     
-    private var filterCurrencies: [Currency] = []
-    private var currencies: [Currency] = []
+    private var filterCurrencies: [CurrencyModel] = []
+    private var currencies: [CurrencyModel] = []
     private var page: Int = 2
     private var isLoading = false
+    private var orderByString = Constants.OrderCryptoCurrencyText.marketCap.rawValue
     
     // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Constants.Colors.backgroundColor
-        
-        title = "Currencies List"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
+                
         customActivityIndicator.startAnimating()
         tableView.alpha = 0.0
         view.addSubview(tableView)
@@ -70,6 +68,8 @@ class CryptoCurrenciesViewController: UIViewController {
             self?.currencies = currencies
             self?.customActivityIndicator.alpha = 0.0
             self?.customActivityIndicator.stopAnimating()
+            CoreDataService.shared.clearEntityOf(type: Currency.self)
+            CoreDataService.shared.saveDataFrom(array: currencies)
             UIView.animate(withDuration: 0.3) {
                 self?.tableView.alpha = 1.0
             }
@@ -114,6 +114,26 @@ extension CryptoCurrenciesViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - UITableViewDelegate
+
+extension CryptoCurrenciesViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: CryptoCurrenciesHeaderView.reuseId)
+                as? CryptoCurrenciesHeaderView
+        else {
+            return nil
+        }
+        
+        headerView.delegate = self
+        headerView.configureHeaderLabel(orderByString)
+        
+        return headerView
+    }
+}
+
+// MARK: - UITableViewDataSourcePrefetching
+
 extension CryptoCurrenciesViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard
@@ -151,21 +171,6 @@ extension CryptoCurrenciesViewController: UITableViewDataSourcePrefetching {
     }
 }
 
-extension CryptoCurrenciesViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(
-                withIdentifier: CryptoCurrenciesHeaderView.reuseId)
-                as? CryptoCurrenciesHeaderView
-        else {
-            return nil
-        }
-        
-        headerView.delegate = self
-        
-        return headerView
-    }
-}
-
 // MARK: - UISearchBarDelegate
 
 extension CryptoCurrenciesViewController: UISearchBarDelegate {
@@ -189,33 +194,33 @@ extension CryptoCurrenciesViewController: CryptoCurrenciesHeaderViewDelegate {
             switch result.title {
             case Constants.OrderCryptoCurrencyText.marketCap.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $0.marketCap > $1.marketCap }
+                self.orderByString = Constants.OrderCryptoCurrencyText.marketCap.rawValue
                 self.tableView.reloadData()
-                print("\(Constants.OrderCryptoCurrencyText.marketCap.rawValue)")
                 self.dismiss(animated: true)
             case Constants.OrderCryptoCurrencyText.volume.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $0.totalVolume > $1.totalVolume }
+                self.orderByString = Constants.OrderCryptoCurrencyText.volume.rawValue
                 self.tableView.reloadData()
-                print("\(Constants.OrderCryptoCurrencyText.volume.rawValue)")
                 self.dismiss(animated: true)
             case Constants.OrderCryptoCurrencyText.price.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $0.currentPrice > $1.currentPrice }
+                self.orderByString = Constants.OrderCryptoCurrencyText.price.rawValue
                 self.tableView.reloadData()
-                print("\(Constants.OrderCryptoCurrencyText.price.rawValue)")
                 self.dismiss(animated: true)
             case Constants.OrderCryptoCurrencyText.name.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $1.name > $0.name }
+                self.orderByString = Constants.OrderCryptoCurrencyText.name.rawValue
                 self.tableView.reloadData()
-                print("\(Constants.OrderCryptoCurrencyText.name.rawValue)")
                 self.dismiss(animated: true)
             case Constants.OrderCryptoCurrencyText.percentChange.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $0.priceChangePercentage24H ?? 0 > $1.priceChangePercentage24H ?? 0 }
+                self.orderByString = Constants.OrderCryptoCurrencyText.percentChange.rawValue
                 self.tableView.reloadData()
-                print("\(Constants.OrderCryptoCurrencyText.percentChange.rawValue)")
                 self.dismiss(animated: true)
             case Constants.OrderCryptoCurrencyText.rank.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $0.marketCapRank < $1.marketCapRank }
+                self.orderByString = Constants.OrderCryptoCurrencyText.rank.rawValue
                 self.tableView.reloadData()
-                print("\(Constants.OrderCryptoCurrencyText.rank.rawValue)")
                 self.dismiss(animated: true)
             case .none:
                 print("nothing")

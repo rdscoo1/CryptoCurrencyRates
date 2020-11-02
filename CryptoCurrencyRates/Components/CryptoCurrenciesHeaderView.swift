@@ -40,6 +40,12 @@ class CryptoCurrenciesHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Properties
+    
+    func configureHeaderLabel(_ text: String) {
+        orderCryptoCurrencyButton.setSordLabel(text)
+    }
+    
     // MARK: - Private Methods
     
     private func configureConstraints() {

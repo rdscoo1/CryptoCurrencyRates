@@ -75,7 +75,7 @@ class CryptoCurrencyCell: UITableViewCell {
     
     // MARK: - Public Methods
     
-    func configure(with model: Currency) {
+    func configure(with model: CurrencyModel) {
         iconImageView.loadImage(by: model.image)
         nameLabel.text = model.name
         currencyRankNumberView.setRank(number: model.marketCapRank)

@@ -16,7 +16,7 @@
 		E87E6B6A25487F2600EAF06A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87E6B6925487F2600EAF06A /* NetworkService.swift */; };
 		E87E6B7025487F5A00EAF06A /* RequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87E6B6F25487F5A00EAF06A /* RequestError.swift */; };
 		E87E6B7825487F7C00EAF06A /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87E6B7725487F7C00EAF06A /* CoreDataService.swift */; };
-		E87E6B972548813B00EAF06A /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87E6B962548813B00EAF06A /* Currency.swift */; };
+		E87E6B972548813B00EAF06A /* CurrencyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87E6B962548813B00EAF06A /* CurrencyModel.swift */; };
 		E87E6BBD2548886100EAF06A /* UIImageView+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87E6BBC2548886100EAF06A /* UIImageView+ext.swift */; };
 		E87E6BC3254889C000EAF06A /* CryptoCurrencyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87E6BC2254889C000EAF06A /* CryptoCurrencyCell.swift */; };
 		E87E6BCB2548A42900EAF06A /* UIColor+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87E6BCA2548A42900EAF06A /* UIColor+hex.swift */; };
@@ -32,6 +32,9 @@
 		E88168A02549DCF8001EC50D /* UIViewController+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E881689F2549DCF8001EC50D /* UIViewController+ext.swift */; };
 		E88168A52549DD2F001EC50D /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88168A42549DD2F001EC50D /* HapticFeedback.swift */; };
 		E88168AA254A22A5001EC50D /* CustomActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88168A9254A22A5001EC50D /* CustomActivityIndicator.swift */; };
+		E8FDF8B7254DFB990089B11E /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FDF8B6254DFB990089B11E /* MoreViewController.swift */; };
+		E8FDF8BD254E1D6C0089B11E /* Currency+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FDF8BB254E1D6C0089B11E /* Currency+CoreDataClass.swift */; };
+		E8FDF8BE254E1D6C0089B11E /* Currency+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FDF8BC254E1D6C0089B11E /* Currency+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,7 +70,7 @@
 		E87E6B6925487F2600EAF06A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		E87E6B6F25487F5A00EAF06A /* RequestError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestError.swift; sourceTree = "<group>"; };
 		E87E6B7725487F7C00EAF06A /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
-		E87E6B962548813B00EAF06A /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		E87E6B962548813B00EAF06A /* CurrencyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyModel.swift; sourceTree = "<group>"; };
 		E87E6BBC2548886100EAF06A /* UIImageView+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+ext.swift"; sourceTree = "<group>"; };
 		E87E6BC2254889C000EAF06A /* CryptoCurrencyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoCurrencyCell.swift; sourceTree = "<group>"; };
 		E87E6BCA2548A42900EAF06A /* UIColor+hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+hex.swift"; sourceTree = "<group>"; };
@@ -83,6 +86,9 @@
 		E881689F2549DCF8001EC50D /* UIViewController+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ext.swift"; sourceTree = "<group>"; };
 		E88168A42549DD2F001EC50D /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
 		E88168A9254A22A5001EC50D /* CustomActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityIndicator.swift; sourceTree = "<group>"; };
+		E8FDF8B6254DFB990089B11E /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		E8FDF8BB254E1D6C0089B11E /* Currency+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Currency+CoreDataClass.swift"; sourceTree = "<group>"; };
+		E8FDF8BC254E1D6C0089B11E /* Currency+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Currency+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,7 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				E87E6B5D25487CEC00EAF06A /* CoreData */,
-				E87E6B962548813B00EAF06A /* Currency.swift */,
+				E87E6B962548813B00EAF06A /* CurrencyModel.swift */,
 				E88168A42549DD2F001EC50D /* HapticFeedback.swift */,
 			);
 			path = Models;
@@ -185,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				E87E6B6425487D8000EAF06A /* CryptoCurrenciesViewController.swift */,
+				E8FDF8B6254DFB990089B11E /* MoreViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -204,6 +211,8 @@
 		E87E6B5D25487CEC00EAF06A /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				E8FDF8BB254E1D6C0089B11E /* Currency+CoreDataClass.swift */,
+				E8FDF8BC254E1D6C0089B11E /* Currency+CoreDataProperties.swift */,
 				E87E6B2625487C7500EAF06A /* CryptoCurrencyRates.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -381,20 +390,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				E87E6BBD2548886100EAF06A /* UIImageView+ext.swift in Sources */,
+				E8FDF8BD254E1D6C0089B11E /* Currency+CoreDataClass.swift in Sources */,
 				E87E6BD92548A52900EAF06A /* Colors.swift in Sources */,
 				E87E6BD02548A46200EAF06A /* Constants.swift in Sources */,
 				E87E6B1E25487C7500EAF06A /* AppDelegate.swift in Sources */,
 				E87E6BDE2548AB8100EAF06A /* Images.swift in Sources */,
+				E8FDF8BE254E1D6C0089B11E /* Currency+CoreDataProperties.swift in Sources */,
 				E87E6B7025487F5A00EAF06A /* RequestError.swift in Sources */,
 				E881688E2548E92A001EC50D /* CurrencyRankView.swift in Sources */,
 				E881689B2549DC70001EC50D /* UIAlertViewController+ext.swift in Sources */,
 				E87E6BEE2548D5CD00EAF06A /* CryptoCurrenciesHeaderView.swift in Sources */,
-				E87E6B972548813B00EAF06A /* Currency.swift in Sources */,
+				E87E6B972548813B00EAF06A /* CurrencyModel.swift in Sources */,
 				E87E6BC3254889C000EAF06A /* CryptoCurrencyCell.swift in Sources */,
 				E88168A02549DCF8001EC50D /* UIViewController+ext.swift in Sources */,
 				E87E6B6525487D8000EAF06A /* CryptoCurrenciesViewController.swift in Sources */,
 				E87E6BE92548B47400EAF06A /* CustomNavigationBar.swift in Sources */,
 				E87E6B6A25487F2600EAF06A /* NetworkService.swift in Sources */,
+				E8FDF8B7254DFB990089B11E /* MoreViewController.swift in Sources */,
 				E87E6BE42548ACBA00EAF06A /* OrderCryptoCurrencyButton.swift in Sources */,
 				E87E6BCB2548A42900EAF06A /* UIColor+hex.swift in Sources */,
 				E88168A52549DD2F001EC50D /* HapticFeedback.swift in Sources */,
