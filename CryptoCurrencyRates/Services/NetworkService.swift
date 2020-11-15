@@ -21,7 +21,7 @@ class NetworkService {
     
     // MARK: - Public Methods
     
-    func getAllCoins(page: Int, completion: @escaping ([CurrencyModel]) -> Void) {
+    func getAllCoins(page: Int, completion: @escaping (Result<[CurrencyModel], Error>) -> Void) {
         let params: [String: String] = [
             "vs_currency": "usd",
             "order": "market_cap_desc",
@@ -32,14 +32,14 @@ class NetworkService {
         ]
         
         makeRequest(CurrencyModel.self,
-                    path: .markets,
                     httpMethod: .get,
+                    path: .markets,
                     parameters: params) { response in
             switch response {
             case .success(let items):
-                completion(items)
+                completion(.success(items))
             case .failure(let error):
-                print(error.localizedDescription)
+                completion(.failure(error))
             }
         }
     }
@@ -47,25 +47,20 @@ class NetworkService {
     // MARK: - Private Methods
     
     private func makeRequest<T: Decodable>(_ model: T.Type,
-                                   path: ApiPaths,
-                                   httpMethod: HTTPMethod,
-                                   parameters: [String: String]? = nil,
-                                   completion: @escaping (Result<[T], RequestError>) -> Void) {
-        let urlString = Constants.baseUrl + path.rawValue
+                                           httpMethod: HTTPMethod,
+                                           path: ApiPaths,
+                                           parameters: [String: String]? = nil,
+                                           completion: @escaping (Result<[T], RequestError>) -> Void) {
+        let request = buildRequest(for: Constants.baseUrl, path: path.rawValue, method: httpMethod, parameters: parameters)
         
-        guard let url = URL(string: urlString) else {
-            return
-        }
-                        
-        let request = createRequest(url: url, method: httpMethod, parameters: parameters)
+        let configuration = createConfiguration()
         
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-//            print("❌ ❌ ❌ Error request: \(String(describing: error))")
-//            print("↩️ ↩️ ↩️ Data request: \(String(describing: String(data: data ?? Data(), encoding: .utf8)))")
-            
-            guard
-                error == nil
-            else {
+        let session = URLSession(configuration: configuration)
+        
+        session.dataTask(with: request) { (data, response, error) in
+            //            print("❌ ❌ ❌ Error request: \(String(describing: error))")
+            //            print("↩️ ↩️ ↩️ Data request: \(String(describing: String(data: data ?? Data(), encoding: .utf8)))")
+            guard error == nil else {
                 completion(.failure(.client))
                 return
             }
@@ -74,7 +69,7 @@ class NetworkService {
                 completion(.failure(.noData))
                 return
             }
-                        
+            
             do {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -85,31 +80,38 @@ class NetworkService {
             } catch {
                 print("❌ \(RequestError.decoding.localizedDescription) ❌\n\(error)")
             }
-        }
-        
-        DispatchQueue.global(qos: .utility).async {
-            task.resume()
-        }
+        }.resume()
     }
     
-    private func createRequest(url: URL,
-                               method: HTTPMethod,
-                               parameters: [String: String]? = nil) -> URLRequest {
-        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            return URLRequest(url: url)
-        }
-        components.scheme = "https"
+    private func createConfiguration() -> URLSessionConfiguration {
+        let configuration = URLSessionConfiguration.default
+        configuration.waitsForConnectivity = true
+        configuration.timeoutIntervalForResource = 60
+        configuration.httpAdditionalHeaders = [
+            "Content-type": "application/json",
+            "Accept-Charset": "utf-8"
+        ]
         
+        return configuration
+    }
+    
+    private func buildRequest(for url: String,
+                              path: String,
+                              method: HTTPMethod,
+                              parameters: [String: String]? = nil) -> URLRequest {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = url
+        components.path = "/api/v3/\(path)"
+                
         if let parameters = parameters {
-            components.queryItems = parameters.map { key, value in
-                URLQueryItem(name: key, value: value)
+            components.queryItems = parameters.map {
+                URLQueryItem(name: $0.key, value: $0.value)
             }
         }
-        
+                
         var request = URLRequest(url: components.url!)
-        
-        request.addValue("application/json", forHTTPHeaderField: "Content-type")
-        
+                
         request.httpMethod = method.rawValue
         request.timeoutInterval = 15
         return request

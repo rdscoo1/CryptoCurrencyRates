@@ -21,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         CoreDataService.shared.applicationDocumentsDirectory()
         
+        setenv("CFNETWORK_DIAGNOSTICS", "3", 1)
+        
         return true
     }
     

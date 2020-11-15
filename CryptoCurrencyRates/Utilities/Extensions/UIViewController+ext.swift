@@ -8,6 +8,17 @@
 import UIKit
 
 extension UIViewController {
+    func presentErrorAlert(tryAgainHandler: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+        let haptic: HapticFeedback = .error
+        let alertVC = UIAlertController(title: "Ошибка", message: "Проверьте ваше подключение", preferredStyle: .alert)
+        let tryAgainAction = UIAlertAction(title: "Попробовать еще раз", style: .default, handler: tryAgainHandler)
+        alertVC.addAction(tryAgainAction)
+        alertVC.modalPresentationStyle = .overFullScreen
+        alertVC.modalTransitionStyle = .crossDissolve
+        haptic.impact()
+        return alertVC
+    }
+    
     func getOrderActionSheet(handler: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let haptic: HapticFeedback = .success
         let alertController = UIAlertController(title: "Order by", message: nil, preferredStyle: .actionSheet)

@@ -13,17 +13,13 @@ class CoreDataService {
     
     private init(){}
     
-    var context: NSManagedObjectContext {
-        get {
+    lazy var context: NSManagedObjectContext = {
             return persistentContainer.viewContext
-        }
-    }
+    }()
     
-    var backgroundContext: NSManagedObjectContext {
-        get {
+    lazy var backgroundContext: NSManagedObjectContext = {
             return persistentContainer.newBackgroundContext()
-        }
-    }
+    }()
     
     private(set) lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "CryptoCurrencyRates")
@@ -74,6 +70,24 @@ class CoreDataService {
         saveContext()
     }
     
+    // MARK: - Fetch records for Entity
+    
+    func fetchRecordsForEntity<T>(_ entity: T) -> [NSManagedObject] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: String(describing: entity.self))
+        
+        var result = [NSManagedObject]()
+        
+        do {
+            let records = try context.fetch(fetchRequest)
+            if let records = records as? [NSManagedObject] {
+                result = records
+            }
+        } catch {
+            print("Unable to fetch managed objects for entity \(entity).")
+        }
+        
+        return result
+    }
     
     // MARK: - Getting path to Database
     

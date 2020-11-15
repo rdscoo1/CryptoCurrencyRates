@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class CryptoCurrenciesViewController: UIViewController {
     
@@ -28,7 +29,7 @@ class CryptoCurrenciesViewController: UIViewController {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Search"
         searchBar.searchBarStyle = .prominent
-//        searchBar.delegate = self
+        //        searchBar.delegate = self
         return searchBar
     }()
     
@@ -36,8 +37,16 @@ class CryptoCurrenciesViewController: UIViewController {
     
     private let networkService = NetworkService()
     
+    private lazy var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "AlbumItem")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataService.shared.context, sectionNameKeyPath: #keyPath(Currency.name), cacheName: nil)
+        return frc
+    }()
+    
     // MARK: - Private variables
     
+    private var currenciesObjects: [NSManagedObject]? = []
     private var filterCurrencies: [CurrencyModel] = []
     private var currencies: [CurrencyModel] = []
     private var page: Int = 2
@@ -49,35 +58,65 @@ class CryptoCurrenciesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Constants.Colors.backgroundColor
-                
+        
         customActivityIndicator.startAnimating()
         tableView.alpha = 0.0
-        view.addSubview(tableView)
-        view.addSubview(customActivityIndicator)
         
-        configureConstraints()
+        setupViews()
         
+        loadFromCoreData()
         requestCurrencies()
     }
     
     // MARK: - Private Methods
     
     private func requestCurrencies() {
-        networkService.getAllCoins(page: page - 1) { [weak self] currencies in
-            self?.filterCurrencies = currencies
-            self?.currencies = currencies
-            self?.customActivityIndicator.alpha = 0.0
-            self?.customActivityIndicator.stopAnimating()
-            CoreDataService.shared.clearEntityOf(type: Currency.self)
-            CoreDataService.shared.saveDataFrom(array: currencies)
-            UIView.animate(withDuration: 0.3) {
-                self?.tableView.alpha = 1.0
+        networkService.getAllCoins(page: page - 1) { [weak self] response in
+            guard let self = self else { return }
+            switch response {
+            case .success(let currencies):
+                self.filterCurrencies = currencies
+                self.currencies = currencies
+                self.customActivityIndicator.alpha = 0.0
+                self.customActivityIndicator.stopAnimating()
+                CoreDataService.shared.clearEntityOf(type: Currency.self)
+                CoreDataService.shared.saveDataFrom(array: currencies)
+                UIView.animate(withDuration: 0.3) {
+                    self.tableView.alpha = 1.0
+                }
+                self.tableView.reloadData()
+            case .failure(_):
+                self.showErrorAlert()
             }
-            self?.tableView.reloadData()
         }
     }
     
-    private func configureConstraints() {
+    private func loadFromCoreData() {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch (let fetchError){
+            print("Unable to Perform Fetch Request")
+            print("\(fetchError), \(fetchError.localizedDescription)")
+        }
+    }
+    
+    private func showErrorAlert() {
+        customActivityIndicator.alpha = 0.0
+        customActivityIndicator.stopAnimating()
+        DispatchQueue.main.async {
+            self.present((self.presentErrorAlert { [weak self] result in
+                guard let self = self else { return }
+                self.customActivityIndicator.alpha = 1.0
+                self.customActivityIndicator.startAnimating()
+                self.requestCurrencies()
+            }), animated: true)
+        }
+    }
+    
+    private func setupViews() {
+        view.addSubview(customActivityIndicator)
+        view.addSubview(tableView)
+        
         customActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -146,26 +185,30 @@ extension CryptoCurrenciesViewController: UITableViewDataSourcePrefetching {
            isLoading == false {
             
             isLoading = true
-            
-            networkService.getAllCoins(page: page) { [weak self] items in
-                guard
-                    let self = self,
-                    items.count > 0
-                else { return }
-                
-                let oldIndex = self.currencies.count
-                self.page += 1
-                
-                var indexPathes: [IndexPath] = []
-                self.filterCurrencies.append(contentsOf: items)
-                self.currencies.append(contentsOf: items)
-                for i in oldIndex..<(self.currencies.count) {
-                    indexPathes.append(IndexPath(row: i, section: 0))
+            networkService.getAllCoins(page: page) { [weak self] response in
+                guard let self = self else { return }
+                switch response {
+                case .success(let items):
+                    print(items)
+                    guard items.count > 0 else { return }
+                    
+                    let oldIndex = self.currencies.count
+                    self.page += 1
+                    
+                    var indexPathes: [IndexPath] = []
+                    self.filterCurrencies.append(contentsOf: items)
+                    self.currencies.append(contentsOf: items)
+                    for i in oldIndex..<(self.currencies.count) {
+                        indexPathes.append(IndexPath(row: i, section: 0))
+                    }
+                    
+                    self.tableView.insertRows(at: indexPathes, with: .automatic)
+                    
+                    self.isLoading = false
+                case .failure(_):
+                    self.showErrorAlert()
                 }
                 
-                self.tableView.insertRows(at: indexPathes, with: .automatic)
-                
-                self.isLoading = false
             }
         }
     }
@@ -190,7 +233,8 @@ extension CryptoCurrenciesViewController: UISearchBarDelegate {
 
 extension CryptoCurrenciesViewController: CryptoCurrenciesHeaderViewDelegate {
     func orderButtonTapped() {
-        present(getOrderActionSheet(handler: { result in
+        present(getOrderActionSheet(handler: { [weak self] result in
+            guard let self = self else { return }
             switch result.title {
             case Constants.OrderCryptoCurrencyText.marketCap.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $0.marketCap > $1.marketCap }

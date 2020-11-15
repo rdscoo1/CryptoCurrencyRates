@@ -8,7 +8,7 @@
 import UIKit
 
 struct Constants {
-    static let baseUrl = "api.coingecko.com/api/v3"
+    static let baseUrl = "api.coingecko.com"
     
     enum OrderCryptoCurrencyText: String {
         case marketCap = "Market Cap"

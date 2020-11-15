@@ -11,13 +11,16 @@ extension UIImageView {
     func loadImage(by imageURL: String) {
         guard let url = URL(string: imageURL) else { return }
         
-        let cache = URLCache.shared
-        let request = URLRequest(url: url)
+        let configuration = URLSessionConfiguration.default
+        configuration.urlCache = URLCache(memoryCapacity: 50 * 1024 * 1024, diskCapacity: 50 * 1024 * 1024, diskPath: "images")
+        let session = URLSession(configuration: configuration)
         
-        if let imageDate = cache.cachedResponse(for: request)?.data {
-            self.image = UIImage(data: imageDate)
+        let request = URLRequest(url: url)
+                
+        if let imageData = configuration.urlCache?.cachedResponse(for: request)?.data {
+            self.image = UIImage(data: imageData)
         } else {
-            let task = URLSession.shared.dataTask(with: request) { [unowned self] (data, response, error) in
+            let task = session.dataTask(with: request) { [unowned self] (data, response, error) in
                 guard error == nil,
                       let data = data,
                       let response = response as? HTTPURLResponse, response.statusCode == 200
@@ -25,7 +28,7 @@ extension UIImageView {
                     return
                 }
                 let cacheResponse = CachedURLResponse(response: response, data: data)
-                cache.storeCachedResponse(cacheResponse, for: request)
+                configuration.urlCache?.storeCachedResponse(cacheResponse, for: request)
                 DispatchQueue.main.async {
                     self.image = UIImage(data: data)
                 }
