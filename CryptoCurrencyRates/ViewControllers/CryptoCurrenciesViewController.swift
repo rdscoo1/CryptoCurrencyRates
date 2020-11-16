@@ -38,9 +38,10 @@ class CryptoCurrenciesViewController: UIViewController {
     private let networkService = NetworkService()
     
     private lazy var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "AlbumItem")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataService.shared.context, sectionNameKeyPath: #keyPath(Currency.name), cacheName: nil)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Currency")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "marketCapRank", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataService.shared.context, sectionNameKeyPath: nil, cacheName: nil)
+        frc.delegate = self
         return frc
     }()
     
@@ -57,6 +58,8 @@ class CryptoCurrenciesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Currencies List"
+
         view.backgroundColor = Constants.Colors.backgroundColor
         
         customActivityIndicator.startAnimating()
@@ -84,9 +87,8 @@ class CryptoCurrenciesViewController: UIViewController {
                 UIView.animate(withDuration: 0.3) {
                     self.tableView.alpha = 1.0
                 }
-                self.tableView.reloadData()
-            case .failure(_):
-                self.showErrorAlert()
+            case .failure (let error):
+                self.showErrorAlert(message: error.localizedDescription)
             }
         }
     }
@@ -98,13 +100,18 @@ class CryptoCurrenciesViewController: UIViewController {
             print("Unable to Perform Fetch Request")
             print("\(fetchError), \(fetchError.localizedDescription)")
         }
+        self.customActivityIndicator.alpha = 0.0
+        self.customActivityIndicator.stopAnimating()
+        UIView.animate(withDuration: 0.3) {
+            self.tableView.alpha = 1.0
+        }
     }
     
-    private func showErrorAlert() {
+    private func showErrorAlert(message: String) {
         customActivityIndicator.alpha = 0.0
         customActivityIndicator.stopAnimating()
         DispatchQueue.main.async {
-            self.present((self.presentErrorAlert { [weak self] result in
+            self.present((self.presentErrorAlert(message: message) { [weak self] result in
                 guard let self = self else { return }
                 self.customActivityIndicator.alpha = 1.0
                 self.customActivityIndicator.startAnimating()
@@ -114,8 +121,8 @@ class CryptoCurrenciesViewController: UIViewController {
     }
     
     private func setupViews() {
-        view.addSubview(customActivityIndicator)
         view.addSubview(tableView)
+        view.addSubview(customActivityIndicator)
         
         customActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
         
@@ -137,7 +144,8 @@ class CryptoCurrenciesViewController: UIViewController {
 
 extension CryptoCurrenciesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filterCurrencies.count
+        guard let currencies = fetchedResultsController.fetchedObjects else { return 0 }
+        return currencies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -145,9 +153,10 @@ extension CryptoCurrenciesViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let currency = filterCurrencies[indexPath.row]
-        
-        cell.configure(with: currency)
+        guard let currencies = fetchedResultsController.object(at: indexPath) as? Currency
+        else { return cell }
+                
+        cell.configure(with: currencies)
         
         return cell
     }
@@ -171,6 +180,34 @@ extension CryptoCurrenciesViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - NSFetchedResultsControllerDelegate
+
+extension CryptoCurrenciesViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            if let indexPath = newIndexPath {
+                tableView.insertRows(at: [indexPath], with: .middle)
+            }
+        case .delete:
+            if let indexPath = indexPath {
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        default:
+            break
+        }
+        
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+    }
+}
+
 // MARK: - UITableViewDataSourcePrefetching
 
 extension CryptoCurrenciesViewController: UITableViewDataSourcePrefetching {
@@ -189,24 +226,13 @@ extension CryptoCurrenciesViewController: UITableViewDataSourcePrefetching {
                 guard let self = self else { return }
                 switch response {
                 case .success(let items):
-                    print(items)
                     guard items.count > 0 else { return }
-                    
-                    let oldIndex = self.currencies.count
                     self.page += 1
-                    
-                    var indexPathes: [IndexPath] = []
-                    self.filterCurrencies.append(contentsOf: items)
-                    self.currencies.append(contentsOf: items)
-                    for i in oldIndex..<(self.currencies.count) {
-                        indexPathes.append(IndexPath(row: i, section: 0))
-                    }
-                    
-                    self.tableView.insertRows(at: indexPathes, with: .automatic)
-                    
                     self.isLoading = false
-                case .failure(_):
-                    self.showErrorAlert()
+                    
+                    CoreDataService.shared.saveDataFrom(array: items)
+                case .failure(let error):
+                    self.showErrorAlert(message: error.localizedDescription)
                 }
                 
             }
@@ -225,7 +251,6 @@ extension CryptoCurrenciesViewController: UISearchBarDelegate {
         } else {
             filterCurrencies = currencies
         }
-        tableView.reloadData()
     }
 }
 
@@ -239,37 +264,31 @@ extension CryptoCurrenciesViewController: CryptoCurrenciesHeaderViewDelegate {
             case Constants.OrderCryptoCurrencyText.marketCap.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $0.marketCap > $1.marketCap }
                 self.orderByString = Constants.OrderCryptoCurrencyText.marketCap.rawValue
-                self.tableView.reloadData()
                 self.dismiss(animated: true)
             case Constants.OrderCryptoCurrencyText.volume.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $0.totalVolume > $1.totalVolume }
                 self.orderByString = Constants.OrderCryptoCurrencyText.volume.rawValue
-                self.tableView.reloadData()
                 self.dismiss(animated: true)
             case Constants.OrderCryptoCurrencyText.price.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $0.currentPrice > $1.currentPrice }
                 self.orderByString = Constants.OrderCryptoCurrencyText.price.rawValue
-                self.tableView.reloadData()
                 self.dismiss(animated: true)
             case Constants.OrderCryptoCurrencyText.name.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $1.name > $0.name }
                 self.orderByString = Constants.OrderCryptoCurrencyText.name.rawValue
-                self.tableView.reloadData()
                 self.dismiss(animated: true)
             case Constants.OrderCryptoCurrencyText.percentChange.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $0.priceChangePercentage24H ?? 0 > $1.priceChangePercentage24H ?? 0 }
                 self.orderByString = Constants.OrderCryptoCurrencyText.percentChange.rawValue
-                self.tableView.reloadData()
                 self.dismiss(animated: true)
             case Constants.OrderCryptoCurrencyText.rank.rawValue:
                 self.filterCurrencies = self.filterCurrencies.sorted { $0.marketCapRank < $1.marketCapRank }
                 self.orderByString = Constants.OrderCryptoCurrencyText.rank.rawValue
-                self.tableView.reloadData()
                 self.dismiss(animated: true)
             case .none:
-                print("nothing")
+                break
             case .some(_):
-                print("some")
+                break
             }
         }), animated: true)
     }

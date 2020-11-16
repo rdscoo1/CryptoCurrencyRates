@@ -9,7 +9,7 @@ import UIKit
 
 class CryptoCurrencyCell: UITableViewCell {
     
-    static let reuseId = String(describing: self)
+    static let reuseId = "CryptoCurrencyCell"
     
     // MARK: - Private Properties
     
@@ -75,15 +75,15 @@ class CryptoCurrencyCell: UITableViewCell {
     
     // MARK: - Public Methods
     
-    func configure(with model: CurrencyModel) {
-        iconImageView.loadImage(by: model.image)
+    func configure(with model: Currency) {
+        iconImageView.loadImage(by: model.imageUrl ?? "")
         nameLabel.text = model.name
-        currencyRankNumberView.setRank(number: model.marketCapRank)
-        symbolLabel.text = model.symbol.uppercased()
+        currencyRankNumberView.setRank(number: Int(model.marketCapRank))
+        symbolLabel.text = model.symbol?.uppercased()
         priceLabel.text = "$\(model.currentPrice)"
-        var priceChange = String(format: "%.2f", model.priceChangePercentage24H ?? 0)
+        var priceChange = String(format: "%.2f", model.priceChangePercentage24H)
         
-        if model.priceChangePercentage24H ?? 0 >= 0 {
+        if model.priceChangePercentage24H >= 0 {
             priceChangeLabel.textColor = Constants.Colors.greenColor
             priceChangeArrow.image = .rectangleArrowUp
             priceChangeArrow.tintColor = Constants.Colors.greenColor
@@ -126,11 +126,10 @@ class CryptoCurrencyCell: UITableViewCell {
             currencyRankNumberView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
             currencyRankNumberView.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
             currencyRankNumberView.heightAnchor.constraint(equalToConstant: 18),
-            currencyRankNumberView.widthAnchor.constraint(equalToConstant: 18),
             
             symbolLabel.centerYAnchor.constraint(equalTo: currencyRankNumberView.centerYAnchor),
             symbolLabel.leadingAnchor.constraint(equalTo: currencyRankNumberView.trailingAnchor, constant: 4),
-            symbolLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor)
+            symbolLabel.trailingAnchor.constraint(lessThanOrEqualTo: priceLabel.leadingAnchor, constant: -16)
         ])
     }
 }

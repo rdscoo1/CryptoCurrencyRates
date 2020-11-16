@@ -59,7 +59,7 @@ class NetworkService {
         
         session.dataTask(with: request) { (data, response, error) in
             //            print("❌ ❌ ❌ Error request: \(String(describing: error))")
-            //            print("↩️ ↩️ ↩️ Data request: \(String(describing: String(data: data ?? Data(), encoding: .utf8)))")
+//                        print("↩️ ↩️ ↩️ Data request: \(String(describing: String(data: data ?? Data(), encoding: .utf8)))")
             guard error == nil else {
                 completion(.failure(.client))
                 return

@@ -11,7 +11,8 @@ struct CurrencyModel: Codable {
     let id, symbol, name: String
     let image: String
     let currentPrice: Double
-    let marketCap, marketCapRank: Int
+    let marketCapRank: Int
+    let marketCap: Double
     let totalVolume: Double
     let priceChangePercentage24H: Double?
     let priceChange24H: Double?

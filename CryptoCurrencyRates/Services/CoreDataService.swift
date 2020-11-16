@@ -112,6 +112,7 @@ class CoreDataService {
         else { return nil }
         
         entity.id = model.id
+        entity.imageUrl = model.image
         entity.name = model.name
         entity.symbol = model.symbol
         entity.marketCapRank = Int32(model.marketCapRank)

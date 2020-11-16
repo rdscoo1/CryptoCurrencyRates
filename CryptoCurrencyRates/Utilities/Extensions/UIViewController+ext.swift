@@ -8,9 +8,9 @@
 import UIKit
 
 extension UIViewController {
-    func presentErrorAlert(tryAgainHandler: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+    func presentErrorAlert(message: String, tryAgainHandler: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let haptic: HapticFeedback = .error
-        let alertVC = UIAlertController(title: "Ошибка", message: "Проверьте ваше подключение", preferredStyle: .alert)
+        let alertVC = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
         let tryAgainAction = UIAlertAction(title: "Попробовать еще раз", style: .default, handler: tryAgainHandler)
         alertVC.addAction(tryAgainAction)
         alertVC.modalPresentationStyle = .overFullScreen

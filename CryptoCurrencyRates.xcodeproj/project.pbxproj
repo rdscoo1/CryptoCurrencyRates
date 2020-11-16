@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E8294D012561D79000BCDF20 /* Currency+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8294D002561D79000BCDF20 /* Currency+CoreDataProperties.swift */; };
 		E87E6B1E25487C7500EAF06A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87E6B1D25487C7500EAF06A /* AppDelegate.swift */; };
 		E87E6B2825487C7500EAF06A /* CryptoCurrencyRates.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E87E6B2625487C7500EAF06A /* CryptoCurrencyRates.xcdatamodeld */; };
 		E87E6B2D25487C7600EAF06A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E87E6B2B25487C7600EAF06A /* LaunchScreen.storyboard */; };
@@ -34,7 +35,6 @@
 		E88168AA254A22A5001EC50D /* CustomActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88168A9254A22A5001EC50D /* CustomActivityIndicator.swift */; };
 		E8FDF8B7254DFB990089B11E /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FDF8B6254DFB990089B11E /* MoreViewController.swift */; };
 		E8FDF8BD254E1D6C0089B11E /* Currency+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FDF8BB254E1D6C0089B11E /* Currency+CoreDataClass.swift */; };
-		E8FDF8BE254E1D6C0089B11E /* Currency+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FDF8BC254E1D6C0089B11E /* Currency+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E8294D002561D79000BCDF20 /* Currency+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Currency+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E87E6B1A25487C7500EAF06A /* CryptoCurrencyRates.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoCurrencyRates.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E87E6B1D25487C7500EAF06A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E87E6B2725487C7500EAF06A /* CryptoCurrencyRates.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CryptoCurrencyRates.xcdatamodel; sourceTree = "<group>"; };
@@ -88,7 +89,6 @@
 		E88168A9254A22A5001EC50D /* CustomActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomActivityIndicator.swift; sourceTree = "<group>"; };
 		E8FDF8B6254DFB990089B11E /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		E8FDF8BB254E1D6C0089B11E /* Currency+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Currency+CoreDataClass.swift"; sourceTree = "<group>"; };
-		E8FDF8BC254E1D6C0089B11E /* Currency+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Currency+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,8 +211,8 @@
 		E87E6B5D25487CEC00EAF06A /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				E8294D002561D79000BCDF20 /* Currency+CoreDataProperties.swift */,
 				E8FDF8BB254E1D6C0089B11E /* Currency+CoreDataClass.swift */,
-				E8FDF8BC254E1D6C0089B11E /* Currency+CoreDataProperties.swift */,
 				E87E6B2625487C7500EAF06A /* CryptoCurrencyRates.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -395,7 +395,7 @@
 				E87E6BD02548A46200EAF06A /* Constants.swift in Sources */,
 				E87E6B1E25487C7500EAF06A /* AppDelegate.swift in Sources */,
 				E87E6BDE2548AB8100EAF06A /* Images.swift in Sources */,
-				E8FDF8BE254E1D6C0089B11E /* Currency+CoreDataProperties.swift in Sources */,
+				E8294D012561D79000BCDF20 /* Currency+CoreDataProperties.swift in Sources */,
 				E87E6B7025487F5A00EAF06A /* RequestError.swift in Sources */,
 				E881688E2548E92A001EC50D /* CurrencyRankView.swift in Sources */,
 				E881689B2549DC70001EC50D /* UIAlertViewController+ext.swift in Sources */,

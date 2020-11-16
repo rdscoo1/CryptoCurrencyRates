@@ -50,7 +50,8 @@ class CurrencyRankView: UIView {
     
     private func configureConstraints() {
         NSLayoutConstraint.activate([
-            rankNumberLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            rankNumberLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
+            rankNumberLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),
             rankNumberLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
