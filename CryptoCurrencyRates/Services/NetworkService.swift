@@ -7,12 +7,6 @@
 
 import Foundation
 
-enum HTTPMethod: String {
-    case get = "GET"
-    case post = "POST"
-    case delete = "DELETE"
-}
-
 enum ApiPaths: String {
     case markets = "/coins/markets"
 }
@@ -53,16 +47,16 @@ class NetworkService {
                                            path: ApiPaths,
                                            parameters: [String: String]? = nil,
                                            completion: @escaping results<T>) {
-        let request = buildRequest(for: Constants.baseUrl, path: path.rawValue, method: httpMethod, parameters: parameters)
+        let request = buildRequest(path: path.rawValue, method: httpMethod, parameters: parameters)
+        NetworkLogger.log(request: request)
         
         let configuration = createConfiguration()
-        
         let session = URLSession(configuration: configuration)
         
         session.dataTask(with: request) { (data, response, error) in
-            //            print("❌ ❌ ❌ Error request: \(String(describing: error))")
-//                        print("↩️ ↩️ ↩️ Data request: \(String(describing: String(data: data ?? Data(), encoding: .utf8)))")
+//            print("↩️ ↩️ ↩️ Data request: \(String(describing: String(data: data ?? Data(), encoding: .utf8)))")
             guard error == nil else {
+                print("❌ ❌ ❌ Error request: \(String(describing: error))")
                 completion(.failure(.client))
                 return
             }
@@ -80,7 +74,7 @@ class NetworkService {
                     completion(.success(items))
                 }
             } catch {
-                print("❌ \(RequestError.decoding.localizedDescription) ❌\n\(error)")
+                print("❌ \(RequestError.unableToDecode.reason) ❌\n\(error)")
             }
         }.resume()
     }
@@ -97,25 +91,23 @@ class NetworkService {
         return configuration
     }
     
-    private func buildRequest(for url: String,
-                              path: String,
+    private func buildRequest(path: String,
                               method: HTTPMethod,
                               parameters: [String: String]? = nil) -> URLRequest {
         var components = URLComponents()
         components.scheme = "https"
-        components.host = url
+        components.host = Constants.baseUrl
         components.path = "/api/v3/\(path)"
-                
+        
         if let parameters = parameters {
             components.queryItems = parameters.map {
                 URLQueryItem(name: $0.key, value: $0.value)
             }
         }
-                
-        var request = URLRequest(url: components.url!)
-                
+        
+        var request = URLRequest(url: components.url!, timeoutInterval: 10.0)
+        
         request.httpMethod = method.rawValue
-        request.timeoutInterval = 15
         return request
     }
     
@@ -129,7 +121,7 @@ class NetworkService {
         case 401:
             return .unauthorized
         case 403:
-            return .norights
+            return .noRights
         case 500...:
             return .server
         default:

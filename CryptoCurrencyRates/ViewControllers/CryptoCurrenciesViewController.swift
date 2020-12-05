@@ -216,7 +216,6 @@ extension CryptoCurrenciesViewController: UITableViewDataSourcePrefetching {
         else { return }
         let previousQuantity = currencies.count
                 
-        print(previousQuantity)
         if maxRow > previousQuantity - 10,
            isLoading == false {
             

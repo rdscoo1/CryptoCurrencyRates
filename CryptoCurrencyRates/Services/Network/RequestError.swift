@@ -17,7 +17,7 @@ enum RequestError: String, Error, LocalizedError {
     case unableToDecode = "❌ Декодирование не удалось ❌"
     case unknown = "❌ Неизвестная ошибка ❌"
     
-    var localizedDescription: String {
+    var reason: String {
         return self.rawValue
     }
 }
