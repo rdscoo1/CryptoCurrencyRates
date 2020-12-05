@@ -19,6 +19,8 @@ enum ApiPaths: String {
 
 class NetworkService {
     
+    typealias results<T> = (Result<[T], RequestError>) -> Void
+    
     // MARK: - Public Methods
     
     func getAllCoins(page: Int, completion: @escaping (Result<[CurrencyModel], Error>) -> Void) {
@@ -50,7 +52,7 @@ class NetworkService {
                                            httpMethod: HTTPMethod,
                                            path: ApiPaths,
                                            parameters: [String: String]? = nil,
-                                           completion: @escaping (Result<[T], RequestError>) -> Void) {
+                                           completion: @escaping results<T>) {
         let request = buildRequest(for: Constants.baseUrl, path: path.rawValue, method: httpMethod, parameters: parameters)
         
         let configuration = createConfiguration()

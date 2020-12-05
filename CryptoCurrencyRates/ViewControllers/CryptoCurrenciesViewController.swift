@@ -24,7 +24,7 @@ class CryptoCurrenciesViewController: UIViewController {
         tableView.sectionHeaderHeight = 48
         return tableView
     }()
-    
+        
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Search"
@@ -59,7 +59,7 @@ class CryptoCurrenciesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Currencies List"
-
+        
         view.backgroundColor = Constants.Colors.backgroundColor
         
         customActivityIndicator.startAnimating()
@@ -200,7 +200,6 @@ extension CryptoCurrenciesViewController: NSFetchedResultsControllerDelegate {
         default:
             break
         }
-        
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -215,10 +214,10 @@ extension CryptoCurrenciesViewController: UITableViewDataSourcePrefetching {
         guard
             let maxRow = indexPaths.map({ $0.row }).max()
         else { return }
-        
-        let previousQuntity = currencies.count
-        
-        if maxRow > previousQuntity - 10,
+        let previousQuantity = currencies.count
+                
+        print(previousQuantity)
+        if maxRow > previousQuantity - 10,
            isLoading == false {
             
             isLoading = true
@@ -227,6 +226,7 @@ extension CryptoCurrenciesViewController: UITableViewDataSourcePrefetching {
                 switch response {
                 case .success(let items):
                     guard items.count > 0 else { return }
+                    self.currencies += items
                     self.page += 1
                     self.isLoading = false
                     

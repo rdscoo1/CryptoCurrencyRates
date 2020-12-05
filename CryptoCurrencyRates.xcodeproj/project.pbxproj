@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		E8294D012561D79000BCDF20 /* Currency+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8294D002561D79000BCDF20 /* Currency+CoreDataProperties.swift */; };
+		E84D7581257C000300EA76A1 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84D7580257C000300EA76A1 /* HTTPMethod.swift */; };
+		E84D7589257C005800EA76A1 /* NetworkLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84D7588257C005800EA76A1 /* NetworkLogger.swift */; };
+		E84D758E257C00C200EA76A1 /* EndPointType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84D758D257C00C200EA76A1 /* EndPointType.swift */; };
+		E84D7593257C087000EA76A1 /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84D7592257C087000EA76A1 /* EndPoint.swift */; };
 		E87E6B1E25487C7500EAF06A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87E6B1D25487C7500EAF06A /* AppDelegate.swift */; };
 		E87E6B2825487C7500EAF06A /* CryptoCurrencyRates.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E87E6B2625487C7500EAF06A /* CryptoCurrencyRates.xcdatamodeld */; };
 		E87E6B2D25487C7600EAF06A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E87E6B2B25487C7600EAF06A /* LaunchScreen.storyboard */; };
@@ -56,6 +60,10 @@
 
 /* Begin PBXFileReference section */
 		E8294D002561D79000BCDF20 /* Currency+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Currency+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E84D7580257C000300EA76A1 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		E84D7588257C005800EA76A1 /* NetworkLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLogger.swift; sourceTree = "<group>"; };
+		E84D758D257C00C200EA76A1 /* EndPointType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPointType.swift; sourceTree = "<group>"; };
+		E84D7592257C087000EA76A1 /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
 		E87E6B1A25487C7500EAF06A /* CryptoCurrencyRates.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoCurrencyRates.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E87E6B1D25487C7500EAF06A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E87E6B2725487C7500EAF06A /* CryptoCurrencyRates.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CryptoCurrencyRates.xcdatamodel; sourceTree = "<group>"; };
@@ -116,6 +124,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E84D757F257BFFCA00EA76A1 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				E84D7597257C0A2E00EA76A1 /* EndPoint */,
+				E87E6B6925487F2600EAF06A /* NetworkService.swift */,
+				E87E6B6F25487F5A00EAF06A /* RequestError.swift */,
+				E84D7580257C000300EA76A1 /* HTTPMethod.swift */,
+				E84D7588257C005800EA76A1 /* NetworkLogger.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		E84D7597257C0A2E00EA76A1 /* EndPoint */ = {
+			isa = PBXGroup;
+			children = (
+				E84D758D257C00C200EA76A1 /* EndPointType.swift */,
+				E84D7592257C087000EA76A1 /* EndPoint.swift */,
+			);
+			path = EndPoint;
+			sourceTree = "<group>";
+		};
 		E87E6B1125487C7500EAF06A = {
 			isa = PBXGroup;
 			children = (
@@ -171,7 +200,7 @@
 		E87E6B5925487CAE00EAF06A /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				E87E6B6925487F2600EAF06A /* NetworkService.swift */,
+				E84D757F257BFFCA00EA76A1 /* Network */,
 				E87E6B7725487F7C00EAF06A /* CoreDataService.swift */,
 			);
 			path = Services;
@@ -221,7 +250,6 @@
 		E87E6B6E25487F4E00EAF06A /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				E87E6B6F25487F5A00EAF06A /* RequestError.swift */,
 				E87E6BCF2548A46200EAF06A /* Constants.swift */,
 				E87E6BD82548A52900EAF06A /* Colors.swift */,
 				E87E6BDD2548AB8100EAF06A /* Images.swift */,
@@ -397,8 +425,10 @@
 				E87E6BDE2548AB8100EAF06A /* Images.swift in Sources */,
 				E8294D012561D79000BCDF20 /* Currency+CoreDataProperties.swift in Sources */,
 				E87E6B7025487F5A00EAF06A /* RequestError.swift in Sources */,
+				E84D7581257C000300EA76A1 /* HTTPMethod.swift in Sources */,
 				E881688E2548E92A001EC50D /* CurrencyRankView.swift in Sources */,
 				E881689B2549DC70001EC50D /* UIAlertViewController+ext.swift in Sources */,
+				E84D758E257C00C200EA76A1 /* EndPointType.swift in Sources */,
 				E87E6BEE2548D5CD00EAF06A /* CryptoCurrenciesHeaderView.swift in Sources */,
 				E87E6B972548813B00EAF06A /* CurrencyModel.swift in Sources */,
 				E87E6BC3254889C000EAF06A /* CryptoCurrencyCell.swift in Sources */,
@@ -406,12 +436,14 @@
 				E87E6B6525487D8000EAF06A /* CryptoCurrenciesViewController.swift in Sources */,
 				E87E6BE92548B47400EAF06A /* CustomNavigationBar.swift in Sources */,
 				E87E6B6A25487F2600EAF06A /* NetworkService.swift in Sources */,
+				E84D7589257C005800EA76A1 /* NetworkLogger.swift in Sources */,
 				E8FDF8B7254DFB990089B11E /* MoreViewController.swift in Sources */,
 				E87E6BE42548ACBA00EAF06A /* OrderCryptoCurrencyButton.swift in Sources */,
 				E87E6BCB2548A42900EAF06A /* UIColor+hex.swift in Sources */,
 				E88168A52549DD2F001EC50D /* HapticFeedback.swift in Sources */,
 				E87E6B7825487F7C00EAF06A /* CoreDataService.swift in Sources */,
 				E87E6B2825487C7500EAF06A /* CryptoCurrencyRates.xcdatamodeld in Sources */,
+				E84D7593257C087000EA76A1 /* EndPoint.swift in Sources */,
 				E88168AA254A22A5001EC50D /* CustomActivityIndicator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
