@@ -16,8 +16,7 @@ class CustomActivityIndicator: UIView {
         let startAngle = CGFloat(-Double.pi / 2)
         let endAngle = CGFloat(5 * Double.pi / 4)
         
-        // Use UIBezierPath as an easy way to create the CGPath for the layer.
-        // The path should be the entire circle.
+        // Making form of a circle
         let circlePath = UIBezierPath(arcCenter: CGPoint(x: frame.size.width / 2,
                                                          y: frame.size.width / 2),
                                       radius: radius,
